@@ -1,7 +1,22 @@
 const gameboard = () => {
   const defaultStartLocation = [0, 0];
-  const coorArray = [];
+  const coordArray = [];
   const chessTable = document.createElement("table");
+
+  // Create board cells and apply position values:
+  chessTable.setAttribute("class", "center");
+
+  for (let i = 0; i < 8; i++) {
+    const tableRow = document.createElement("tr");
+    let cellRowCoord = Math.abs(i - 7); // Math.abs converts the negative number into a positive one
+    tableRow.textContent = cellRowCoord;
+
+    for (let z = 0; z < 8; z++) {
+      const tableCell = document.createElement("td"); // Creates actual cells
+      let cellColumnCoord = z;
+      tableCell.textContent = cellColumnCoord;
+    }
+  }
 };
 
 export { gameboard };
