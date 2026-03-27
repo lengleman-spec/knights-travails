@@ -33,7 +33,18 @@ const gameboard = () => {
         coordArray.splice(0, 2);
       }
     }
+    chessTable.appendChild(tableRow);
   }
+
+  const cellNodes = chessTable.querySelectorAll("td");
+  cellNodes.forEach((cellNode) => {
+    if (defaultStartLocation.toString() === cellNode.dataset.coordArray) {
+      let knightImg = document.createElement("img");
+      knightImg.src = ""; // Path to image of knight
+      cellNode.appendChild(knightImg);
+    }
+  });
+  document.body.appendChild(chessTable);
 };
 
 export { gameboard };
