@@ -3,3 +3,5 @@ const gameboard = () => {
   const coorArray = [];
   const chessTable = document.createElement("table");
 };
+
+export { gameboard };
