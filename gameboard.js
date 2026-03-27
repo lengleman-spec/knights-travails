@@ -15,6 +15,23 @@ const gameboard = () => {
       const tableCell = document.createElement("td"); // Creates actual cells
       let cellColumnCoord = z;
       tableCell.textContent = cellColumnCoord;
+
+      if ((i + z) % 2 == 0) {
+        // Even numbers = white cells
+        tableCell.setAttribute("class", "cell whitecell");
+        tableRow.appendChild(tableCell);
+        coordArray.push(cellRowCoord);
+        coordArray.push(cellColumnCoord);
+        tableCell.dataset.coordArray = coordArray;
+        coordArray.splice(0, 2);
+      } else {
+        tableCell.setAttribute("class", "cell blackcell");
+        tableRow.appendChild(tableCell);
+        coordArray.push(cellRowCoord);
+        coordArray.push(cellColumnCoord);
+        tableCell.dataset.coordArray = coordArray;
+        coordArray.splice(0, 2);
+      }
     }
   }
 };
