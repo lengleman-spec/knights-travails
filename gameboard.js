@@ -40,7 +40,8 @@ const gameboard = () => {
   cellNodes.forEach((cellNode) => {
     if (defaultStartLocation.toString() === cellNode.dataset.coordArray) {
       let knightImg = document.createElement("img");
-      knightImg.src = ""; // Path to image of knight
+      knightImg.src =
+        "https://thumbs.dreamstime.com/b/white-chess-knight-piece-background-icon-203800607.jpg"; // Path to image of knight
       cellNode.appendChild(knightImg);
     }
   });
