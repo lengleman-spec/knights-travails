@@ -1,60 +1,49 @@
+// gameboard.js
+import { knightsTravails } from "./search-algo.js";
+
 const gameboard = () => {
   const defaultStartLocation = [0, 0];
-  const coordArray = [];
   const chessTable = document.createElement("table");
+  chessTable.classList.add("center");
 
-  // Create board cells and apply position values:
-  chessTable.setAttribute("class", "center");
-
+  // Create 8x8 board
   for (let i = 0; i < 8; i++) {
     const tableRow = document.createElement("tr");
-    let cellRowCoord = Math.abs(i - 7); // Math.abs converts the negative number into a positive one
-    tableRow.textContent = cellRowCoord;
+    const rowCoord = Math.abs(i - 7);
 
-    for (let z = 0; z < 8; z++) {
-      const tableCell = document.createElement("td"); // Creates actual cells
-      let cellColumnCoord = z;
-      tableCell.textContent = cellColumnCoord;
+    for (let j = 0; j < 8; j++) {
+      const cell = document.createElement("td");
+      cell.dataset.coordArray = `${rowCoord},${j}`;
+      cell.classList.add("cell");
+      cell.classList.add((i + j) % 2 === 0 ? "whitecell" : "blackcell");
+      tableRow.appendChild(cell);
 
-      if ((i + z) % 2 == 0) {
-        // Even numbers = white cells
-        tableCell.setAttribute("class", "cell whitecell");
-        tableRow.appendChild(tableCell);
-        coordArray.push(cellRowCoord);
-        coordArray.push(cellColumnCoord);
-        tableCell.dataset.coordArray = coordArray;
-        coordArray.splice(0, 2);
-      } else {
-        tableCell.setAttribute("class", "cell blackcell");
-        tableRow.appendChild(tableCell);
-        coordArray.push(cellRowCoord);
-        coordArray.push(cellColumnCoord);
-        tableCell.dataset.coordArray = coordArray;
-        coordArray.splice(0, 2);
+      // Place knight at default start location
+      if (
+        rowCoord === defaultStartLocation[0] &&
+        j === defaultStartLocation[1]
+      ) {
+        const knightImg = document.createElement("img");
+        knightImg.src =
+          "https://thumbs.dreamstime.com/b/white-chess-knight-piece-background-icon-203800607.jpg";
+        cell.appendChild(knightImg);
       }
     }
     chessTable.appendChild(tableRow);
   }
 
-  const cellNodes = chessTable.querySelectorAll("td");
-  cellNodes.forEach((cellNode) => {
-    if (defaultStartLocation.toString() === cellNode.dataset.coordArray) {
-      let knightImg = document.createElement("img");
-      knightImg.src =
-        "https://thumbs.dreamstime.com/b/white-chess-knight-piece-background-icon-203800607.jpg"; // Path to image of knight
-      cellNode.appendChild(knightImg);
-    }
-  });
   document.body.appendChild(chessTable);
 };
 
 const resetBoard = () => {
   const resetButton = document.querySelector(".clear-board-button");
+  if (!resetButton) return;
 
   resetButton.addEventListener("click", () => {
-    document.querySelector("table").remove();
+    const table = document.querySelector("table");
+    if (table) table.remove();
     gameboard();
   });
 };
 
-export { gameboard };
+export { gameboard, resetBoard, knightsTravails };

@@ -1,13 +1,14 @@
-// Using a breadth-first algo for moves
-const squareRegistry = new Map(); // Map stores key-value pairs and remembers the original insertion order
+// search-algo.js
+import { displayMoves } from "./display-moves.js";
 
-// Get/Set current coords to the board
+const squareRegistry = new Map();
+
+// Create chess square object
 const chessSquare = (x, y) => {
-  const xPosition = x;
-  const yPosition = y;
+  const xPos = x;
+  const yPos = y;
   let predecessor;
 
-  // Array for all possible moves:
   const knightMoves = [
     [1, 2],
     [1, -2],
@@ -19,75 +20,58 @@ const chessSquare = (x, y) => {
     [-2, -1],
   ];
 
+  const name = () => `${xPos},${yPos}`;
   const getPredecessor = () => predecessor;
   const setPredecessor = (newPredecessor) => {
     predecessor = predecessor || newPredecessor;
   };
 
-  // Show x y coordinates:
-  const name = () => `${x}, ${y}`;
-
-  // Evaluate current possible moves against offsets
   const possibleKnightMoves = () => {
     return knightMoves
-      .map((offset) => newSquareFrom(offset[0], offset[1]))
-      .filter((square) => square !== undefined);
+      .map(([dx, dy]) => newSquareFrom(dx, dy))
+      .filter((sq) => sq !== undefined);
   };
 
-  // Calculate new set of square coords against offsets
-  const newSquareFrom = (xOffset, yOffset) => {
-    const [newX, newY] = [xPosition + xOffset, yPosition + yOffset];
-
-    // If offset is between 0 and 8, it's a valid move:
-    if (0 <= newX && newX < 8 && 0 <= newY && newY < 8) {
+  const newSquareFrom = (dx, dy) => {
+    const [newX, newY] = [xPos + dx, yPos + dy];
+    if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
       return chessSquare(newX, newY);
     }
   };
 
-  // Get/set map constructor object name
-  // if squareRegistry does not have a name, create one and give it the following objects
-  if (squareRegistry.has(name())) {
-    return squareRegistry.get(name());
-  } else {
-    const newSquare = {
-      name,
-      getPredecessor,
-      setPredecessor,
-      possibleKnightMoves,
-    };
+  if (squareRegistry.has(name())) return squareRegistry.get(name());
 
-    squareRegistry.set(name(), newSquare);
-    return newSquare;
-  }
+  const newSquare = {
+    name,
+    getPredecessor,
+    setPredecessor,
+    possibleKnightMoves,
+  };
+  squareRegistry.set(name(), newSquare);
+  return newSquare;
 };
 
-// Intake the click coords from the user and run the search algo
+// BFS for shortest knight path
 const knightsTravails = (start, finish) => {
-  squareRegistry.clear(); // clear old values
-
+  squareRegistry.clear();
   const origin = chessSquare(...start);
   const target = chessSquare(...finish);
 
   const queue = [origin];
-  while (!queue.includes(target)) {
-    const currentSquare = queue.shift();
 
-    const enqueueList = currentSquare.possibleKnightMoves();
-    enqueueList.forEach((square) => square.setPredecessor(currentSquare));
-    queue.push(...enqueueList);
+  while (!queue.includes(target)) {
+    const current = queue.shift();
+    const moves = current.possibleKnightMoves();
+    moves.forEach((sq) => sq.setPredecessor(current));
+    queue.push(...moves);
   }
 
   const path = [target];
   while (!path.includes(origin)) {
-    const prevSquare = path[0].getPredecessor();
-    path.unshift(prevSquare);
+    path.unshift(path[0].getPredecessor());
   }
 
-  //   console.log(`The shortest path was ${path.length - 1} moves!`);
-  //   console.log("The moves were:");
-  path.forEach((square) => {
-    squareCoord.push(square.name());
-  });
+  const squareCoord = path.map((sq) => sq.name());
   displayMoves(path, squareCoord);
 };
 

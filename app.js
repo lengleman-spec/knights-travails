@@ -1,9 +1,9 @@
-import { gameboard } from "./gameboard.js";
-import { knightsTravails } from "./search-algo.js";
+// app.js
+import { gameboard, resetBoard } from "./gameboard.js";
+import { uiController } from "./ui-move.js";
 
-// DOM for chess board module
-
-const appController = (function () {
-  gameboard();
-  knightsTravails([3, 3], [4, 3]);
-})();
+document.addEventListener("DOMContentLoaded", () => {
+  gameboard(); // render board
+  resetBoard(); // attach reset button listener
+  uiController(); // attach click listeners
+});

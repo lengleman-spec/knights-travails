@@ -1,41 +1,35 @@
-import { knightsTravails } from "./search-algo";
+// ui-move.js
+import { knightsTravails } from "./search-algo.js";
 
-// Module to control and keep track of the moves/clicks from user
 const uiController = () => {
   const cellNodes = document.querySelectorAll("td");
-  cellNodes.forEach((cellNode) => {
-    // Loop through all cells to find the knight img and assign coords
-    if (cellNode.querySelector("img") !== null) {
-      let knightLocation = JSON.parse("[" + cellNode.dataset.coordArray + "]");
-      console.log("Current knight location ", knightLocation);
-    }
 
-    // Loop through all cells to attacj click listeners to each cell. Assign coords once click is seen
-    cellNode.addEventListener("click", function () {
-      let clickedLocation = JSON.parse("[" + cellNode.dataset.coordArray + "]");
-      console.log("Clicked on location ", clickedLocation);
+  cellNodes.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      const clickedLocation = cell.dataset.coordArray.split(",").map(Number);
 
-      //Loop again to locate new current location and assign coords.
-      // Remove old knight img from previous coords
-      // Call knightsTravails module to start search algo
-      const cellNodes = document.querySelectorAll("td");
-      cellNodes.forEach((cellNode) => {
-        if (cellNode.querySelector("img") !== null) {
-          let knightLocation = JSON.parse(
-            "[" + cellNode.dataset.coordArray + "]",
-          );
-          console.log("Current knight location ", knightLocation);
-          const knightImg = document.querySelector("img");
-          knightImg.remove();
-          knightsTravails(knightLocation, clickedLocation);
-        }
-      });
+      // Find current knight location
+      const currentCell = document.querySelector("td img")?.parentElement;
+      if (!currentCell) return;
 
-      // Create the new knight img at the clicked location
-      const knightImg = document.createElement("img");
-      knightImg.src =
+      const knightLocation = currentCell.dataset.coordArray
+        .split(",")
+        .map(Number);
+
+      // Remove old knight
+      const knightImg = currentCell.querySelector("img");
+      if (knightImg) knightImg.remove();
+
+      // Calculate shortest path and display moves
+      knightsTravails(knightLocation, clickedLocation);
+
+      // Place knight at new location
+      const newKnightImg = document.createElement("img");
+      newKnightImg.src =
         "https://thumbs.dreamstime.com/b/white-chess-knight-piece-background-icon-203800607.jpg";
-      cellNode.appendChild(knightImg);
+      cell.appendChild(newKnightImg);
     });
   });
 };
+
+export { uiController };
