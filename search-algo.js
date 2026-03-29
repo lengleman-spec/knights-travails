@@ -83,9 +83,12 @@ const knightsTravails = (start, finish) => {
     path.unshift(prevSquare);
   }
 
-  console.log(`The shortest path was ${path.length - 1} moves!`);
-  console.log("The moves were:");
-  path.forEach((square) => console.log(square.name()));
+  //   console.log(`The shortest path was ${path.length - 1} moves!`);
+  //   console.log("The moves were:");
+  path.forEach((square) => {
+    squareCoord.push(square.name());
+  });
+  displayMoves(path, squareCoord);
 };
 
 export { knightsTravails };
