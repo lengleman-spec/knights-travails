@@ -48,4 +48,13 @@ const gameboard = () => {
   document.body.appendChild(chessTable);
 };
 
+const resetBoard = () => {
+  const resetButton = document.querySelector(".clear-board-button");
+
+  resetButton.addEventListener("click", () => {
+    document.querySelector("table").remove();
+    gameboard();
+  });
+};
+
 export { gameboard };

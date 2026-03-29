@@ -41,3 +41,11 @@ img {
 .clear-game-button {
   margin-top: 15px;
 }
+
+.display-div {
+  height: 200px;
+  width: 300px;
+  background-color: lightgray;
+  text-align: center;
+  box-shadow: 10px 5px 5px black;
+}
